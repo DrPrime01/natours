@@ -9,7 +9,8 @@ const {
   protectRoutes,
 } = require("../controller/authController");
 
-const { getUsers, getUser, updateUser, deleteUser, updateMe } = routes;
+const { getUsers, getUser, updateUser, deleteUser, updateMe, deleteMe } =
+  routes;
 
 const router = express.Router();
 
@@ -25,6 +26,7 @@ router.post("/forgot-password", forgotPassword);
 router.patch("/reset-password/:token", resetPassword);
 router.patch("/update-password", protectRoutes, updatePassword);
 router.patch("/update-me", protectRoutes, updateMe);
+router.delete("/delete-me", protectRoutes, deleteMe);
 
 router.route(`/`).get(getUsers);
 router.route(`/:id`).get(getUser).patch(updateUser).delete(deleteUser);
