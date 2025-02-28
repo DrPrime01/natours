@@ -36,15 +36,16 @@ router
     restrictTo("admin", "lead-guide", "guide"),
     getMonthlyPlan
   );
-
 router
   .route(`/`)
   .get(getTours)
   .post(protectRoutes, restrictTo("admin", "lead-guide"), createTour);
+
+router.use(protectRoutes);
 router
   .route(`/:id`)
-  .get(protectRoutes, getTour)
-  .patch(protectRoutes, restrictTo("admin", "lead-guide"), updateTour)
-  .delete(protectRoutes, restrictTo("admin", "lead-guide"), deleteTour);
+  .get(getTour)
+  .patch(restrictTo("admin", "lead-guide"), updateTour)
+  .delete(restrictTo("admin", "lead-guide"), deleteTour);
 
 module.exports = router;
