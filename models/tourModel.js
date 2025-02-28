@@ -106,6 +106,10 @@ const tourSchema = new mongoose.Schema(
   }
 );
 
+// setting index to a property helps with making sorting or filtering or searching faster. it improves read performance
+tourSchema.index({ price: 1, ratingsAverage: -1 });
+tourSchema.index({ slug: 1 });
+
 // NB: Virtual properties can't be used in queries because they're technically not in the DB
 
 tourSchema.virtual("durationWeeks").get(function () {
