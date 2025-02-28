@@ -7,9 +7,10 @@ const {
   resetPassword,
   updatePassword,
   protectRoutes,
+  restrictTo,
 } = require("../controller/authController");
 
-const { getUsers, getUser, updateUser, deleteUser, updateMe, deleteMe } =
+const { getUsers, getUser, updateUser, deleteUser, updateMe, deleteMe, getMe } =
   routes;
 
 const router = express.Router();
@@ -19,7 +20,7 @@ const router = express.Router();
 //   console.log(val);
 //   next();
 // });
-
+router.get("/me", protectRoutes, getMe, getUser);
 router.post("/signup", signUp);
 router.post("/login", login);
 router.post("/forgot-password", forgotPassword);
@@ -29,6 +30,10 @@ router.patch("/update-me", protectRoutes, updateMe);
 router.delete("/delete-me", protectRoutes, deleteMe);
 
 router.route(`/`).get(getUsers);
-router.route(`/:id`).get(getUser).patch(updateUser).delete(deleteUser);
+router
+  .route(`/:id`)
+  .get(getUser)
+  .patch(protectRoutes, restrictTo("admin"), updateUser)
+  .delete(protectRoutes, restrictTo("admin"), deleteUser);
 
 module.exports = router;

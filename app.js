@@ -9,6 +9,8 @@ const hpp = require("hpp");
 const v = require("./constants");
 const tourRouter = require("./routes/tourRoutes");
 const usersRouter = require("./routes/usersRoutes");
+const reviewRouter = require("./routes/reviewRoutes");
+
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controller/errorController");
 
@@ -63,6 +65,7 @@ app.use((req, res, next) => {
 // routes
 app.use(`/api/${v}/tours`, tourRouter);
 app.use(`/api/${v}/users`, usersRouter);
+app.use(`/api/${v}/reviews`, reviewRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404)); // whenever the middleware next method receives an argument, the error handling middleware is immediately invoked while other middlewares are automatically skipped.
