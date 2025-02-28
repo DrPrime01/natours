@@ -12,6 +12,8 @@ const {
   top5Tours,
   getTourStats,
   getMonthlyPlan,
+  getToursWithin,
+  getDistances,
 } = routes;
 
 const router = express.Router();
@@ -36,6 +38,8 @@ router
     restrictTo("admin", "lead-guide", "guide"),
     getMonthlyPlan
   );
+router.get("/tours-within/:distance/center/:latlng/:unit", getToursWithin);
+router.get("/distances/:latlng/unit/:unit", getDistances);
 router
   .route(`/`)
   .get(getTours)
