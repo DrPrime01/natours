@@ -1,3 +1,5 @@
+const path = require("path");
+
 const express = require("express");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
@@ -10,11 +12,19 @@ const v = require("./constants");
 const tourRouter = require("./routes/tourRoutes");
 const usersRouter = require("./routes/usersRoutes");
 const reviewRouter = require("./routes/reviewRoutes");
+const viewRouter = require("./routes/viewRoutes");
 
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controller/errorController");
 
 const app = express();
+
+// Set the template engine
+app.set("view engine", "pug");
+app.set("views", path.join(__dirname, "views"));
+
+// to allow express serve static files
+app.use(express.static(path.join(__dirname, "public")));
 
 // Global Middleware
 app.use(helmet());
@@ -53,9 +63,6 @@ app.use(
   })
 );
 
-// to allow express serve static files
-app.use(express.static(`${__dirname}/public`));
-
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
@@ -63,6 +70,7 @@ app.use((req, res, next) => {
 });
 
 // routes
+app.use("/", viewRouter);
 app.use(`/api/${v}/tours`, tourRouter);
 app.use(`/api/${v}/users`, usersRouter);
 app.use(`/api/${v}/reviews`, reviewRouter);
