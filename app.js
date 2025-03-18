@@ -7,6 +7,7 @@ const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const xssClean = require("xss-clean");
 const hpp = require("hpp");
+const cookieParser = require("cookie-parser");
 
 const v = require("./constants");
 const tourRouter = require("./routes/tourRoutes");
@@ -25,6 +26,7 @@ app.set("views", path.join(__dirname, "views"));
 
 // to allow express serve static files
 app.use(express.static(path.join(__dirname, "public")));
+app.use(cookieParser());
 
 // Global Middleware
 app.use(helmet());
@@ -63,9 +65,16 @@ app.use(
   })
 );
 
+// Set CSP header
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", "script-src 'self' 'unsafe-eval'");
+  next();
+});
+
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
+  // console.log("cookies: ", req.cookies);
   next();
 });
 

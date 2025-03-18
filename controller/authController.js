@@ -73,6 +73,8 @@ const protectRoutes = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith("Bearer")
   ) {
     token = req.headers.authorization.split(" ")[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
 
   if (!token)
@@ -109,6 +111,29 @@ const restrictTo = (...roles) => {
     next();
   };
 };
+
+const isLoggedIn = catchAsync(async (req, res, next) => {
+  if (req.cookies.jwt) {
+    // validate the token
+    const decoded = await promisify(jwt.verify)(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+
+    // check if the user still exists
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) return next();
+
+    // check if user changed password after the jwt was issued
+    if (currentUser.changePasswordAfter(decoded.iat)) return next();
+
+    // THERE IS A LOGGED IN USER
+    res.locals.user = currentUser;
+    return next();
+  }
+
+  next();
+});
 
 const forgotPassword = catchAsync(async (req, res, next) => {
   // 1) Get user based on POSTed email
@@ -204,4 +229,5 @@ module.exports = {
   forgotPassword,
   resetPassword,
   updatePassword,
+  isLoggedIn,
 };

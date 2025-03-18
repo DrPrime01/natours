@@ -25,10 +25,17 @@ const getTour = catchAsync(async (req, res, next) => {
     path: "reviews",
     fields: "review rating user name",
   });
+  const tourName = tour.name;
   res.status(200).render("tour", {
-    title: tour.name,
+    title: tourName,
     tour,
   });
 });
 
-module.exports = { getOverview, getTour };
+const login = (req, res) => {
+  res.status(200).render("login", {
+    title: "Login",
+  });
+};
+
+module.exports = { getOverview, getTour, login };

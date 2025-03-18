@@ -4,12 +4,17 @@ header(class="header")
         form(class="nav__search")
             button(class="nav__search-btn")
                 svg
-                    use(xlink:href="img/icons.svg#icon-search")
+                    use(xlink:href="/img/icons.svg#icon-search")
             input(type="text" placeholder="Search tours" class="nav__search-input")
     div(class="header__logo")
         img(src="/img/logo-white.png" alt="Natours logo")
     nav(class="nav nav--user")
-        a(href="#" class="nav__el") My Bookings
-        a(href="#" class="nav__el")
-            img(src="/img/users/default.jpg" alt="User photo" class="nav__user-img")
-            span Dr Prime
+        if user
+            a(href="#" class="nav__el nav__el--logout") Log out
+            a(href="#" class="nav__el")
+                img(src="/img/users/default.jpg" alt="User photo" class="nav__user-img")
+                span= user.name.split(" ")[0]
+        else
+            a(href="/login" class="nav__el") Login
+            a.nav__el.nav__el--cta Sign Up
+            

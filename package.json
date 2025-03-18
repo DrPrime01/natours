@@ -2,19 +2,23 @@
   "name": "natours",
   "version": "1.0.0",
   "description": "A tour app",
-  "main": "index.js",
+  "main": "./public/js/bundle.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js",
     "start:prod": "NODE_ENV=production nodemon server.js",
     "dev": "nodemon server.js",
-    "debug": "ndb server.js"
+    "debug": "ndb server.js",
+    "watch:js": "webpack --config webpack.config.js",
+    "build:js": "webpack --config webpack.config.js"
   },
   "author": "Dr Prime",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.8.1",
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "core-js": "^3.41.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-mongo-sanitize": "^2.2.0",
@@ -27,8 +31,20 @@
     "morgan": "^1.10.0",
     "nodemailer": "^6.10.0",
     "pug": "^3.0.3",
+    "regenerator-runtime": "^0.14.1",
     "slugify": "^1.6.6",
     "validator": "^13.12.0",
     "xss-clean": "^0.1.4"
-  }
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@parcel/transformer-pug": "^2.13.3",
+    "babel-loader": "^10.0.0",
+    "buffer": "^6.0.3",
+    "process": "^0.11.10",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1"
+  },
+  "browserslist": "> 0.5%, last 2 versions, not dead"
 }
