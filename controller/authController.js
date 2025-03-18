@@ -106,6 +106,7 @@ const protectRoutes = catchAsync(async (req, res, next) => {
 
   // Grant access to the protected route
   req.user = currentUser;
+  res.locals.user = currentUser;
   next();
 });
 

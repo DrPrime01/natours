@@ -11,8 +11,8 @@ header(class="header")
     nav(class="nav nav--user")
         if user
             button(class="nav__el nav__el--logout") Log out
-            a(href="#" class="nav__el")
-                img(src="/img/users/default.jpg" alt="User photo" class="nav__user-img")
+            a(href="/me" class="nav__el")
+                img(src=`/img/users/${user.photo}` alt="User photo" class="nav__user-img")
                 span= user.name.split(" ")[0]
         else
             a(href="/login" class="nav__el") Login

@@ -4746,7 +4746,7 @@ __webpack_require__.r(__webpack_exports__);
 // type is either 'password' or 'data'
 const updateSettings = async (data, type) => {
   try {
-    const url = type === "password" ? "http://127.0.0.1:8080/api/v1/users/updateMyPassword" : "http://127.0.0.1:8080/api/v1/users/updateMe";
+    const url = type === "password" ? "http://localhost:8080/api/v1/users/update-password" : "http://localhost:8080/api/v1/users/update-me";
     const res = await (0,axios__WEBPACK_IMPORTED_MODULE_1__["default"])({
       method: "PATCH",
       url,
@@ -4756,7 +4756,7 @@ const updateSettings = async (data, type) => {
       (0,_alerts__WEBPACK_IMPORTED_MODULE_0__.showAlert)("success", `${type.toUpperCase()} updated successfully!`);
     }
   } catch (err) {
-    (0,_alerts__WEBPACK_IMPORTED_MODULE_0__.showAlert)("error", err.response.data.message);
+    (0,_alerts__WEBPACK_IMPORTED_MODULE_0__.showAlert)("error", err?.response?.data?.message);
   }
 };
 
@@ -4864,13 +4864,13 @@ if (userDataForm) userDataForm.addEventListener("submit", e => {
 if (userPasswordForm) userPasswordForm.addEventListener("submit", async e => {
   e.preventDefault();
   document.querySelector(".btn--save-password").textContent = "Updating...";
-  const passwordCurrent = document.getElementById("password-current").value;
-  const password = document.getElementById("password").value;
-  const passwordConfirm = document.getElementById("password-confirm").value;
+  const currentPassword = document.getElementById("password-current").value;
+  const newPassword = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("password-confirm").value;
   await (0,_updateSettings__WEBPACK_IMPORTED_MODULE_2__.updateSettings)({
-    passwordCurrent,
-    password,
-    passwordConfirm
+    currentPassword,
+    newPassword,
+    confirmPassword
   }, "password");
   document.querySelector(".btn--save-password").textContent = "Save password";
   document.getElementById("password-current").value = "";
