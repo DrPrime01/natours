@@ -4664,7 +4664,7 @@ const login = async (email, password) => {
 };
 const logout = async () => {
   try {
-    const res = await axios__WEBPACK_IMPORTED_MODULE_1__["default"].get("http://localhost:8080//api/v1/users/logout");
+    const res = await axios__WEBPACK_IMPORTED_MODULE_1__["default"].get("http://localhost:8080/api/v1/users/logout");
     if (res.data.status === "success") location.reload(true);
   } catch (err) {
     console.log(err?.response);
