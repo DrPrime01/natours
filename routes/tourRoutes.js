@@ -14,6 +14,8 @@ const {
   getMonthlyPlan,
   getToursWithin,
   getDistances,
+  uploadTourImages,
+  resizeTourImages,
 } = routes;
 
 const router = express.Router();
@@ -49,7 +51,12 @@ router.use(protectRoutes);
 router
   .route(`/:id`)
   .get(getTour)
-  .patch(restrictTo("admin", "lead-guide"), updateTour)
+  .patch(
+    restrictTo("admin", "lead-guide"),
+    uploadTourImages,
+    resizeTourImages,
+    updateTour
+  )
   .delete(restrictTo("admin", "lead-guide"), deleteTour);
 
 module.exports = router;
