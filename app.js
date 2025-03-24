@@ -8,6 +8,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const xssClean = require("xss-clean");
 const hpp = require("hpp");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const v = require("./constants");
 const tourRouter = require("./routes/tourRoutes");
@@ -20,6 +21,8 @@ const globalErrorHandler = require("./controller/errorController");
 
 const app = express();
 
+app.enable("trust proxy");
+
 // Set the template engine
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
@@ -29,7 +32,17 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
 
 // Global Middleware
+
+// Set security HTTP headers
 app.use(helmet());
+
+// Implement CORS
+app.use(cors()); // allows only get and post, simple requests
+
+app.options("*", cors()); // for all routes
+// app.options("/api/v1/tours/:id", cors()) allows non-simple requests like patch, put, delete on that route
+
+// app.use(cors({origin: "https://natours.vercel.app"})) It will allow http requests from only this origin on the web
 
 // Development logging
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));

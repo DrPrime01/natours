@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
-const sendEmail = require("../utils/email");
+const Email = require("../utils/email");
 const version = require("../constants");
 
 const signToken = (id) => {
@@ -45,6 +45,9 @@ const signUp = catchAsync(async (req, res, next) => {
     password: req.body.password,
     confirmPassword: req.body.confirmPassword,
   });
+
+  const url = `${req.protocol}://${req.get("host")}/me`;
+  await new Email(newUser, url).sendWelcome();
 
   createSendToken(newUser, 201, res);
 });
@@ -168,12 +171,7 @@ const forgotPassword = catchAsync(async (req, res, next) => {
   const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\n If you didn't initiate this process, kindly ignore this email.`;
 
   try {
-    await sendEmail({
-      email: user.email,
-      subject: "Password reset token (valid for 10 minutes)",
-      message,
-    });
-
+    await new Email(user, resetURL).sendPasswordReset();
     res.status(200).json({ status: "success", message: "Token sent to mail" });
   } catch (error) {
     user.passwordResetToken = undefined;
@@ -215,7 +213,6 @@ const resetPassword = catchAsync(async (req, res, next) => {
 
 const updatePassword = catchAsync(async (req, res, next) => {
   const { currentPassword, newPassword } = req.body;
-  console.log(req.user.id);
   // 1) Get the user from collection
   const user = await User.findById(req.user.id).select("+password");
 
